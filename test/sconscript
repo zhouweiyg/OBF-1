@@ -1,0 +1,63 @@
+ #
+ # MetaSpark.scala for MetaSpark
+ # Copyright (c) 2015-2016 Wei Zhou,  Zilong  Tan, Chao Mai All Rights Reserved.
+ #
+ # Permission is hereby granted, free of charge, to any person
+ # obtaining a copy of this software and associated documentation
+ # files (the "Software"), to deal in the Software without
+ # restriction, including without limitation the rights to use,
+ # copy, modify, merge, publish, distribute, sublicense, and/or sell
+ # copies of the Software, and to permit persons to whom the
+ # Software is furnished to do so, subject to the following
+ # conditions:
+ #
+ # The above copyright notice and this permission notice shall be
+ # included in all copies or substantial portions of the Software.
+ #
+ # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ # OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ # NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ # HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ # WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ # OTHER DEALINGS IN THE SOFTWARE.
+ #
+import os
+
+Import('env')
+
+# copy parent environment so our alterations don't affect it
+env = env.Clone()
+
+# add src dirs to include path
+# initilize the set of targets to build
+
+matches = []
+
+for root, dirnames, filenames in os.walk('../src'):
+    for dirname in dirnames:
+        dir_path = os.path.join(root, dirname)
+        glob_str = '%s/*.c*' % dir_path
+        matches.append(Glob(glob_str))
+
+print('adding src dir to path: src')
+env.Append(CPPPATH=['../src'])
+
+# add any files in the current directory
+for root, dirnames, filenames in os.walk('.'):
+    for dirname in dirnames:
+        dir_path = os.path.join(root, dirname)
+        glob_str = '%s/*.c*' % dir_path
+        matches.append(Glob(glob_str))
+
+print('adding test dir to path: .')
+env.Append(CPPPATH=['.'])
+matches.append(Glob('./*.c*'))
+
+# debug output
+print('test env CPPPATH:')
+print(env['CPPPATH'])
+
+# build a program that uses the source files as a shared library
+env.Program('../bin/test_main', matches)
