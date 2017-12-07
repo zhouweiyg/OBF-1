@@ -1,5 +1,5 @@
 /*
- * MetaSpark.scala for MetaSpark
+ * 
  * Copyright (c) 2015-2016 Wei Zhou,  Zilong  Tan, Chao Mai All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person
